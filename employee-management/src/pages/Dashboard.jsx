@@ -1,21 +1,40 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
 
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-     localStorage.removeItem("isLoggedIn");
-     navigate("/login");
-  }
+  const [employees, setEmployees] = useState([
+    {
+      id: 1,
+      name: 'Rakesh Kumar',
+      gender: 'Male',
+      dob: '1990-05-15',
+      state: 'Odisha',
+      image: '',
+      active: true
+    },
+    {
+      id: 2,
+      name: 'Payal sharma',
+      gender: 'Female',
+      dob: '1992-08-20',
+      state: 'Delhi',
+      image: '',
+      active: true
+    },
+    {
+      id: 3,
+      name: 'Anil verma',
+      gender: 'Male',
+      dob: '1988-12-10',
+      state: 'Gujarat',
+      image: '',
+      active: false
+    }
+  ]);
 
   return (
-    <div>
-      <h1>dashboard</h1>
-    <button onClick={handleLogout}>Logout</button>
-    </div>
-  )
-}
+    <></>
+  );
+};
 
-export default Dashboard
+export default Dashboard;
