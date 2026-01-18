@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { User, Edit2, Trash2, Printer, Plus, X, LogOut } from 'lucide-react';
+import { User, Edit2, Trash2, Printer, Plus, X, LogOut, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -57,6 +57,9 @@ const EmployeeManagementDashboard = () => {
   });
   const [formErrors, setFormErrors] = useState({});
   const [imagePreview, setImagePreview] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterGender, setFilterGender] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
   const fileInputRef = useRef(null);
 
   const totalEmployees = employees.length;
@@ -139,6 +142,16 @@ const EmployeeManagementDashboard = () => {
     ));
   };
 
+  const filteredEmployees = employees.filter(employee => {
+    const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGender = filterGender === '' || employee.gender === filterGender;
+    const matchesStatus = filterStatus === '' || 
+      (filterStatus === 'active' && employee.active) || 
+      (filterStatus === 'inactive' && !employee.active);
+    
+    return matchesSearch && matchesGender && matchesStatus;
+  });
+
   const handlePrint = (employee) => {
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
@@ -185,7 +198,7 @@ const EmployeeManagementDashboard = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-300 via-purple-700 to-pink-200">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex justify-between items-center mb-6">
@@ -227,6 +240,63 @@ const EmployeeManagementDashboard = () => {
             Add New Employee
           </button>
         </div>
+
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Search & Filter</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                placeholder="Search by name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <select
+                value={filterGender}
+                onChange={(e) => setFilterGender(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">All Genders</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+          {(searchTerm || filterGender || filterStatus) && (
+            <div className="mt-4 flex items-center justify-between">
+              <p className="text-sm text-gray-600">
+                Showing {filteredEmployees.length} of {totalEmployees} employees
+              </p>
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setFilterGender('');
+                  setFilterStatus('');
+                }}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
+        </div>
+
 
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
