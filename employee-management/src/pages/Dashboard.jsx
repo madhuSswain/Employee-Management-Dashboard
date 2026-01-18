@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { User, Edit2, Trash2, Printer, Plus, X, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 
 const INDIAN_STATES = [
@@ -11,6 +12,8 @@ const INDIAN_STATES = [
 ];
 
 const EmployeeManagementDashboard = () => {
+
+  const navigate = useNavigate();
   
   const [employees, setEmployees] = useState([
     {
@@ -172,13 +175,22 @@ const EmployeeManagementDashboard = () => {
     printWindow.print();
   };
 
+  const handleLogout = () => {
+  const confirmLogout = window.confirm("Are you sure you want to logout?");
+  if (confirmLogout) {
+    localStorage.removeItem("isLoggedIn");
+    navigate("/login");
+  }
+};
+
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800">Employee Management Dashboard</h1>
-            <button
+            <button onClick={handleLogout}
               className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center gap-2"
             >
               <LogOut size={20} />
