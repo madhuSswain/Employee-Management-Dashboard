@@ -130,6 +130,12 @@ const EmployeeManagementDashboard = () => {
     }
   };
 
+  const toggleActive = (id) => {
+    setEmployees(employees.map(emp =>
+      emp.id === id ? { ...emp, active: !emp.active } : emp
+    ));
+  };
+
   const handlePrint = (employee) => {
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
@@ -383,6 +389,8 @@ const EmployeeManagementDashboard = () => {
                         <div className="relative">
                           <input
                             type="checkbox"
+                            checked={employee.active}
+                            onChange={() => toggleActive(employee.id)}
                             className="sr-only"
                           />
                           <div className={`block w-14 h-8 rounded-full ${employee.active ? 'bg-green-500' : 'bg-gray-300'}`}></div>
