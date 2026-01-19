@@ -82,6 +82,7 @@ JavaScript (ES6+)
 LocalStorage (Mock API)
 
 ▶️ How to Run the Project Locally
+
 1️⃣ Clone the repository
 git clone https://github.com/<your-username>/employee-management-dashboard.git
 
